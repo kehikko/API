@@ -2,7 +2,7 @@
 
 namespace API;
 
-class API extends Core\Module
+class API extends \Core\Module
 {
 	private $api        = null;
 	private $controller = null;
