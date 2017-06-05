@@ -487,11 +487,11 @@ class API extends \Core\Module
 		{
 			return true;
 		}
-		else if ($type == 'fqdn' && @Validate::FQDN($value) !== false)
+		else if ($type == 'fqdn' && @\Core\Validate::FQDN($value) !== false)
 		{
 			return true;
 		}
-		else if ($type == 'fqdn-wildcard' && @Validate::FQDN($value, true) !== false)
+		else if ($type == 'fqdn-wildcard' && @\Core\Validate::FQDN($value, true) !== false)
 		{
 			return true;
 		}
