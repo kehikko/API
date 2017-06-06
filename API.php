@@ -463,7 +463,7 @@ class API extends \Core\Module
 		{
 			return true;
 		}
-		else if ($type == 'email' && filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE))
+		else if ($type == 'email' && filter_var($value, FILTER_VALIDATE_EMAIL))
 		{
 			return true;
 		}
