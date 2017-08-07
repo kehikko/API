@@ -370,6 +370,8 @@ class API extends \Core\Module
 			$this->setError('Type of value is not valid, need: ' . $type . ', key: ' . $key);
 			return false;
 		}
+		/* helper for later loops that do checks for both normal and array types */
+		$value_a = is_array($value) ? $value : array($value);
 		/* force int and float to their right types */
 		if ($type == 'int')
 		{
@@ -382,24 +384,30 @@ class API extends \Core\Module
 		/* check accepted values */
 		if (isset($api_value['accept']))
 		{
-			if (!in_array($value, $api_value['accept']))
+			foreach ($value_a as $v)
 			{
-				$this->setError('Value not accepted for key: ' . $key);
-				return false;
+				if (!in_array($v, $api_value['accept']))
+				{
+					$this->setError('Value not accepted for key: ' . $key);
+					return false;
+				}
 			}
 		}
 		/* numeric max/min checks */
-		if (in_array($type, array('int', 'float', 'number')))
+		if (in_array($type, array('int', 'float', 'number', 'array')))
 		{
-			if (isset($api_value['min']) && $value < $api_value['min'])
+			foreach ($value_a as $v)
 			{
-				$this->setError('Value too small: ' . $key);
-				return false;
-			}
-			if (isset($api_value['max']) && $value > $api_value['max'])
-			{
-				$this->setError('Value too big: ' . $key);
-				return false;
+				if (isset($api_value['min']) && $v < $api_value['min'])
+				{
+					$this->setError('Value too small: ' . $key);
+					return false;
+				}
+				if (isset($api_value['max']) && $v > $api_value['max'])
+				{
+					$this->setError('Value too big: ' . $key);
+					return false;
+				}
 			}
 		}
 		/* convert datetime string to DateTime object */
