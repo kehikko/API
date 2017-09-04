@@ -6,6 +6,7 @@ class API extends \Core\Module
 {
 	private $api        = null;
 	private $controller = null;
+	private $params     = array();
 
 	public function __construct($controller_or_api, $file = 'api.yaml')
 	{
@@ -30,6 +31,16 @@ class API extends \Core\Module
 	public function getController()
 	{
 		return $this->controller;
+	}
+
+	public function setParameters($params)
+	{
+		$this->params = $params;
+	}
+
+	public function setParameter($name, $value)
+	{
+		$this->params[$name] = $value;
 	}
 
 	public function parse($calls, &$object = null, $new = false, $get_single_array = false)
@@ -92,6 +103,14 @@ class API extends \Core\Module
 		{
 			if (isset($value['method']) && is_string($value['method']))
 			{
+				$params = array();
+				if (isset($value['parameters']))
+				{
+					foreach ($value['parameters'] as $name)
+					{
+						$params[] = $this->params[$name];
+					}
+				}
 				$methods = explode(':', $value['method']);
 				$v       = $object;
 				for ($i = 0; $i < count($methods); $i++)
@@ -103,7 +122,8 @@ class API extends \Core\Module
 					$method = $methods[$i];
 					if ($method)
 					{
-						$v = $v->{$method}();
+						$method = new \ReflectionMethod($v, $method);
+						$v = $method->invokeArgs($v, $params);
 					}
 					else
 					{
