@@ -463,7 +463,8 @@ class API extends \Core\Module
 		{
 			return true;
 		}
-		else if ($type == 'int' && filter_var($value, FILTER_VALIDATE_INT) !== false)
+		/* allow "octal" so that string starting with zero are accepted */
+		else if ($type == 'int' && filter_var($value, FILTER_VALIDATE_INT, FILTER_FLAG_ALLOW_OCTAL) !== false)
 		{
 			return true;
 		}
