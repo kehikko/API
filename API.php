@@ -430,6 +430,22 @@ class API extends \Core\Module
 				}
 			}
 		}
+		else if ($type == 'string')
+		{
+			foreach ($value_a as $v)
+			{
+				if (isset($api_value['min']) && strlen($v) < $api_value['min'])
+				{
+					$this->setError('Value length too small: ' . $key);
+					return false;
+				}
+				if (isset($api_value['max']) && strlen($v) > $api_value['max'])
+				{
+					$this->setError('Value length too big: ' . $key);
+					return false;
+				}
+			}
+		}
 		/* convert datetime string to DateTime object */
 		if ($type == 'datetime')
 		{
