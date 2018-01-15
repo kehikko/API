@@ -8,7 +8,7 @@ class API extends \Core\Module
 	private $controller = null;
 	private $params     = array();
 
-	public function __construct($controller_or_api, $file = 'api.yaml')
+	public function __construct($controller_or_api, $file = 'api.yml')
 	{
 		parent::__construct();
 
