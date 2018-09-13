@@ -60,6 +60,8 @@ class API extends \Core\Module
                 $data = $this->parseGet($calls, $object);
             }
             return $data;
+        } else if ($this->kernel->method == 'options') {
+            return $this->parseOptions($calls);
         }
 
         return true;
@@ -363,6 +365,20 @@ class API extends \Core\Module
         }
 
         return true;
+    }
+
+    private function parseOptions($calls)
+    {
+        $data  = array('put' => array('values' => array()));
+        $calls = is_array($calls) ? $calls : array($calls);
+        foreach ($calls as $call) {
+            if (!isset($this->api[$call])) {
+                $this->setError('API call not found: ' . $call);
+                return false;
+            }
+            $data['put']['values'] = \kernel::mergeArrayRecursive($data['put']['values'], $this->api[$call]['put']['values']);
+        }
+        return $data;
     }
 
     private function checkValueType($type, $value, $key)
