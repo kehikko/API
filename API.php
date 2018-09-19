@@ -362,7 +362,19 @@ class API extends \Core\Module
             if (isset($api_value['key'])) {
                 $object[$api_value['key']] = $value;
             } else if (isset($api_value['method'])) {
-                $object->{$api_value['method']}($value);
+                $params = array();
+                if (isset($api_value['parameters'])) {
+                    foreach ($api_value['parameters'] as $name) {
+                        if (isset($this->params[$name])) {
+                            $params[] = $this->params[$name];
+                        } else {
+                            $params[] = $name;
+                        }
+                    }
+                }
+                $params[] = $value;
+                $method   = new \ReflectionMethod($object, $api_value['method']);
+                $method->invokeArgs($object, $params);
             } else if (isset($api_value['property'])) {
                 $object->{$api_value['property']} = $value;
             }
