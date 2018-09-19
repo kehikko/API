@@ -90,7 +90,11 @@ class API extends \Core\Module
                 $params = array();
                 if (isset($value['parameters'])) {
                     foreach ($value['parameters'] as $name) {
-                        $params[] = $this->params[$name];
+                        if (isset($this->params[$name])) {
+                            $params[] = $this->params[$name];
+                        } else {
+                            $params[] = $name;
+                        }
                     }
                 }
                 $methods = explode(':', $value['method']);
