@@ -433,6 +433,8 @@ class API extends \Core\Module
             return true;
         } else if ($type == 'fqdn-wildcard' && @\Core\Validate::FQDN($value, true) !== false) {
             return true;
+        } else if ($type == 'any') {
+            return true;
         }
 
         $this->setError('Invalid value for type ' . $type . ', key: ' . $key);
