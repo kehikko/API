@@ -125,6 +125,11 @@ class API extends \Core\Module
                         $v = $v->format('c');
                     }
                 }
+                /* check for default */
+                if ($v === null && isset($value['default'])) {
+                    $v = $value['default'];
+                }
+                /* save value */
                 $data[$key] = $v;
             } else if (isset($value['property']) && is_string($value['property'])) {
                 $properties = explode(':', $value['property']);
